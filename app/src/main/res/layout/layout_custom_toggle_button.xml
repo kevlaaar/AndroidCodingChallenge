@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layoutDescription="@xml/toggle_button_motion_scene">
+
+    <View
+        android:id="@+id/backgroundView"
+        android:background="@drawable/border_round_blue"
+        android:layout_width="40dp"
+        android:layout_height="25dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <View
+        android:id="@+id/circleView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/border_round_white"
+        app:layout_constraintDimensionRatio="W,1:1"
+        android:layout_margin="2dp"
+        app:layout_constraintTop_toTopOf="@id/backgroundView"
+        app:layout_constraintBottom_toBottomOf="@id/backgroundView"
+        app:layout_constraintStart_toStartOf="@id/backgroundView"/>
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

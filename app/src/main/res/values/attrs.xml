@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LottieImageView">
+        <attr name="lottie_fileName" />
+        <attr name="lottie_loop" />
+        <attr name="lottie_repeatMode" />
+        <attr name="lottie_scale" />
+        <attr name="lottie_speed" />
+        <attr name="lottie_renderMode" />
+        <attr name="maxHeight" />
+        <attr name="maxWidth" />
+        <attr name="imageUrl" format="string" />
+        <attr name="errorImage" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="ProgressImageView">
+        <attr name="maxHeight" />
+        <attr name="maxWidth" />
+        <attr name="imageUrl" />
+        <attr name="errorImage" />
+    </declare-styleable>
+</resources>
