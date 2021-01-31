@@ -30,7 +30,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="40dp"
             android:layout_marginEnd="40dp"
-            android:background="#FFFFFF"
+            android:background="@color/backgroundWhite"
             android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="H,1:1"
@@ -55,6 +55,57 @@
             app:layout_constraintStart_toStartOf="@id/backgroundCircleImage"
             app:layout_constraintTop_toTopOf="@id/backgroundCircleImage" />
 
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/toggleButtonLayout"
+            android:layout_width="40dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintTop_toBottomOf="@id/employeeRecycler"
+            app:layout_constraintEnd_toStartOf="@id/snappingRecyclerLabel"
+            app:layoutDescription="@xml/toggle_button_motion_scene">
+
+            <View
+                android:id="@+id/backgroundView"
+                android:background="@drawable/border_round_blue"
+                android:layout_width="40dp"
+                android:layout_height="25dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <View
+                android:id="@+id/circleView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/border_round_white_360dp"
+                app:layout_constraintDimensionRatio="W,1:1"
+                android:layout_margin="2dp"
+                app:layout_constraintTop_toTopOf="@id/backgroundView"
+                app:layout_constraintBottom_toBottomOf="@id/backgroundView"
+                app:layout_constraintStart_toStartOf="@id/backgroundView"/>
+
+        </androidx.constraintlayout.motion.widget.MotionLayout>
+        <TextView
+            android:id="@+id/snappingRecyclerLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SNAPPING"
+            android:textSize="12sp"
+            android:textColor="@color/textBlack"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintTop_toTopOf="@id/toggleButtonLayout"
+            app:layout_constraintBottom_toBottomOf="@id/toggleButtonLayout"
+            app:layout_constraintEnd_toEndOf="parent"/>
+        <TextView
+            android:id="@+id/smoothRecyclerLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SMOOTH"
+            android:textSize="12sp"
+            android:textColor="@color/textBlack"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintTop_toTopOf="@id/toggleButtonLayout"
+            app:layout_constraintBottom_toBottomOf="@id/toggleButtonLayout"
+            app:layout_constraintEnd_toStartOf="@id/toggleButtonLayout"/>
         <FrameLayout
             android:id="@+id/teamInfoRecyclerContainer"
             android:layout_width="0dp"
@@ -80,9 +131,9 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/border_round_circle_gradient"
-            android:src="@drawable/icon_arrow_left_blue"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/teamInfoRecyclerContainer" />
+            android:src="@drawable/icon_arrow_left_white"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@id/mainImage" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
@@ -91,69 +142,18 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.6" />
 
-<!--        <FrameLayout-->
-<!--            android:id="@+id/toggleContainer"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="20dp"-->
-<!--            android:layout_marginEnd="20dp"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/snappingRecyclerLabel"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/employeeRecycler">-->
-<!--            <include-->
-<!--                android:id="@+id/toggleButton"-->
-<!--                layout="@layout/layout_custom_toggle_button" />-->
-<!--        </FrameLayout>-->
-        <androidx.constraintlayout.motion.widget.MotionLayout
-            android:id="@+id/toggleButtonLayout"
-            android:layout_width="40dp"
-            android:layout_height="25dp"
-            android:layout_marginEnd="20dp"
-            app:layout_constraintTop_toBottomOf="@id/employeeRecycler"
-            app:layout_constraintEnd_toStartOf="@id/snappingRecyclerLabel"
-            app:layoutDescription="@xml/toggle_button_motion_scene">
-
-            <View
-                android:id="@+id/backgroundView"
-                android:background="@drawable/border_round_blue"
-                android:layout_width="40dp"
-                android:layout_height="25dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <View
-                android:id="@+id/circleView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/border_round_white"
-                app:layout_constraintDimensionRatio="W,1:1"
-                android:layout_margin="2dp"
-                app:layout_constraintTop_toTopOf="@id/backgroundView"
-                app:layout_constraintBottom_toBottomOf="@id/backgroundView"
-                app:layout_constraintStart_toStartOf="@id/backgroundView"/>
-
-        </androidx.constraintlayout.motion.widget.MotionLayout>
-        <TextView
-            android:id="@+id/snappingRecyclerLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SNAPPING"
-            android:textSize="12sp"
-            android:textColor="#000"
-            android:layout_marginEnd="20dp"
-            app:layout_constraintTop_toTopOf="@id/toggleButtonLayout"
-            app:layout_constraintBottom_toBottomOf="@id/toggleButtonLayout"
-            app:layout_constraintEnd_toEndOf="parent"/>
-        <TextView
-            android:id="@+id/smoothRecyclerLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SMOOTH"
-            android:textSize="12sp"
-            android:textColor="#000"
-            android:layout_marginEnd="20dp"
-            app:layout_constraintTop_toTopOf="@id/toggleButtonLayout"
-            app:layout_constraintBottom_toBottomOf="@id/toggleButtonLayout"
-            app:layout_constraintEnd_toStartOf="@id/toggleButtonLayout"/>
+        <ImageView
+            android:id="@+id/settingsButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:padding="10dp"
+            android:background="@drawable/border_round_circle_gradient"
+            android:src="@drawable/icon_settings_white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mainImage" />
     </androidx.constraintlayout.motion.widget.MotionLayout>
+
 
 </layout>

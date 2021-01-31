@@ -44,8 +44,9 @@ class MainFragment : Fragment(), EmployeeAdapter.EmployeeOnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.employeeRecycler.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        employeeAdapter = EmployeeAdapter(requireContext(), employeeList, this)
+        binding.employeeRecycler.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        employeeAdapter = EmployeeAdapter(requireContext(), this)
         val itemAnimator: DefaultItemAnimator = object : DefaultItemAnimator() {
             override fun canReuseUpdatedViewHolder(viewHolder: RecyclerView.ViewHolder): Boolean {
                 return true
@@ -54,7 +55,8 @@ class MainFragment : Fragment(), EmployeeAdapter.EmployeeOnClickListener {
         binding.employeeRecycler.itemAnimator = itemAnimator
         binding.employeeRecycler.adapter = employeeAdapter
         viewModel.teamList.observe(viewLifecycleOwner, {
-            it?.let { refreshTeams(it) } })
+            it?.let { refreshTeams(it) }
+        })
         viewModel.employeeList.observe(viewLifecycleOwner, {
             it?.let {
                 employeeList = it
@@ -62,59 +64,101 @@ class MainFragment : Fragment(), EmployeeAdapter.EmployeeOnClickListener {
             }
         })
         addSnapperListener()
+        if(viewModel.listState != null) {
+            binding.employeeRecycler.layoutManager?.onRestoreInstanceState(viewModel.listState)
+            Glide.with(requireContext())
+                .load(viewModel.selectedEmployeeImageUrl)
+                .circleCrop()
+                .transition(DrawableTransitionOptions.with(GlideDrawableCrossFade()))
+                .into(binding.mainImage)
+            binding.mainImage.changeBackgroundAnimated(
+                "#FFFFFF",
+                viewModel.selectedEmployeeBackgroundColor?: "#FFFFFF",
+                360f,
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                GradientDrawable.LINEAR_GRADIENT
+            )
+            binding.backgroundCircleImage.changeBackgroundAnimated(
+                viewModel.selectedEmployeeBackgroundColor?: "#FFFFFF",
+                "#FFFFFF",
+                600f,
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                GradientDrawable.RADIAL_GRADIENT
+            )
+        }
+        binding.settingsButton.setOnClickListener{
+            findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
+        }
+
+        viewModel.selectedEmployeeListPosition?.let {position ->
+            binding.mainImage.setOnClickListener { navigateToDetails(employeeList[position]) }
+        }
     }
-    private fun addSnapperListener(){
-        binding.toggleButtonLayout.setTransitionListener(object: MotionLayout.TransitionListener{
+
+    private fun addSnapperListener() {
+        binding.toggleButtonLayout.setTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {}
             override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {}
             override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
-                if(p1 == R.id.toggleOff){
+                if (p1 == R.id.toggleOff) {
                     snapHelper.attachToRecyclerView(binding.employeeRecycler)
-                } else if(p1 == R.id.toggleOn){
+                } else if (p1 == R.id.toggleOn) {
                     snapHelper.attachToRecyclerView(null)
                 }
             }
+
             override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {}
         })
     }
-    fun navigateToDetails(employeeObject: Employee) {
+
+    private fun navigateToDetails(employeeObject: Employee) {
         val bundle = bundleOf("employeeObject" to employeeObject)
         findNavController().navigate(R.id.action_mainFragment_to_employeeDetailsFragment, bundle)
     }
+
     private fun refreshEmployees(employeeList: List<Employee>?) {
         Timber.e("REFRESUJEM RECYCLER")
         employeeList?.let {
             employeeAdapter.setData(it)
         }
     }
-    private fun refreshTeams(teamList: List<Team>){
+
+    private fun refreshTeams(teamList: List<Team>) {
         Timber.e("REFRESUJEM TEAMS")
         teamsAdapter = TeamsAdapter(requireContext(), teamList)
         binding.teamInfoRecycler.adapter = teamsAdapter
     }
 
     override fun onEmployeeClick(position: Int) {
-        val employee = employeeList[position]
         Glide.with(requireContext())
-            .load(employee.getImageMainUrl())
+            .load(employeeList[position].getImageMainUrl())
             .circleCrop()
             .transition(DrawableTransitionOptions.with(GlideDrawableCrossFade()))
             .into(binding.mainImage)
         binding.mainImage.changeBackgroundAnimated(
             "#FFFFFF",
-            employee.backgroundColor,
+            employeeList[position].backgroundColor,
             360f,
             GradientDrawable.Orientation.LEFT_RIGHT,
             GradientDrawable.LINEAR_GRADIENT
         )
-        binding.mainImage.setOnClickListener{ navigateToDetails(employee) }
         binding.backgroundCircleImage.changeBackgroundAnimated(
-            employee.backgroundColor,
+            employeeList[position].backgroundColor,
             "#FFFFFF",
-            480f,
+            600f,
             GradientDrawable.Orientation.LEFT_RIGHT,
             GradientDrawable.RADIAL_GRADIENT
         )
+        viewModel.employeeObject = employeeList[position]
+        viewModel.selectedEmployeeImageUrl = employeeList[position].getImageMainUrl()
+        viewModel.selectedEmployeeListPosition = position
+        viewModel.selectedEmployeeBackgroundColor = employeeList[position].backgroundColor
+        binding.mainImage.setOnClickListener { navigateToDetails(employeeList[position]) }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.listState = binding.employeeRecycler.layoutManager?.onSaveInstanceState()
     }
 }
 

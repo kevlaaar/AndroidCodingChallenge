@@ -33,9 +33,9 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/border_round_circle_gradient"
-            android:src="@drawable/icon_arrow_left_blue"
-            motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintTop_toBottomOf="@id/teamInfoRecyclerContainer" />
+            android:src="@drawable/icon_arrow_left_white"
+            motion:layout_constraintEnd_toStartOf="@id/guideline"
+            motion:layout_constraintTop_toBottomOf="@id/mainImage" />
 
     </ConstraintSet>
     <ConstraintSet android:id="@+id/expandSceneEnd">
@@ -52,9 +52,9 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/border_round_circle_gradient"
-            android:src="@drawable/icon_arrow_left_blue"
-            motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintTop_toBottomOf="@id/teamInfoRecyclerContainer" />
+            android:src="@drawable/icon_arrow_left_white"
+            motion:layout_constraintEnd_toStartOf="@id/guideline"
+            motion:layout_constraintTop_toBottomOf="@id/mainImage" />
 
     </ConstraintSet>
 </MotionScene>

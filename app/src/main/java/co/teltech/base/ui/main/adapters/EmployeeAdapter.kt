@@ -17,7 +17,6 @@ import timber.log.Timber
 
 class EmployeeAdapter(
     private val context: Context,
-    private var employeeList: List<Employee>,
     private var employeeOnClickListener: EmployeeOnClickListener
 ) : RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder>() {
     private val itemCallback = object : DiffUtil.ItemCallback<Employee>() {

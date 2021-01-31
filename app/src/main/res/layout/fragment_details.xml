@@ -25,7 +25,7 @@
             android:id="@+id/employeeInformationLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#F3EFEF"
+            android:background="@color/backgroundWhite"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -39,7 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:descendantFocusability="blocksDescendants"
-                    android:background="#F3EFEF">
+                    android:background="@color/backgroundWhite">
 
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/labelsGuideline"
@@ -49,78 +49,80 @@
                         app:layout_constraintGuide_percent="0.1" />
 
                     <TextView
-                        android:id="@+id/alternativeNamesLabel"
+                        android:id="@+id/departmentLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
+                        android:text="Department"
                         android:background="@drawable/border_rounded_top_corners_10dp"
                         android:gravity="end"
                         android:paddingStart="18dp"
                         android:paddingTop="3dp"
                         android:paddingEnd="18dp"
                         android:paddingBottom="3dp"
-                        android:shadowColor="#FFFFFF"
+                        android:shadowColor="#000"
                         android:shadowDx="2"
                         android:shadowDy="2"
                         android:shadowRadius="1.5"
-                        android:textColor="@color/yellow"
+                        android:textColor="#FFF"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="@id/labelsGuideline"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/biographyLabel"
+                        android:id="@+id/descriptionLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:text="Description"
                         android:background="@drawable/border_rounded_top_corners_10dp"
                         android:gravity="end"
                         android:paddingStart="18dp"
                         android:paddingTop="3dp"
                         android:paddingEnd="18dp"
                         android:paddingBottom="3dp"
-                        android:shadowColor="#FFFFFF"
+                        android:shadowColor="#000"
                         android:shadowDx="2"
                         android:shadowDy="2"
                         android:shadowRadius="1.5"
-                        android:textColor="@color/yellow"
+                        android:textColor="#FFF"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="@id/labelsGuideline"
-                        app:layout_constraintTop_toBottomOf="@id/employeeAlternativeNames" />
+                        app:layout_constraintTop_toBottomOf="@id/employeeDepartment" />
 
                     <TextView
-                        android:id="@+id/employeeAlternativeNames"
+                        android:id="@+id/employeeDepartment"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20dp"
-                        android:background="@drawable/border_rounded_top_corners_34dp"
+                        android:background="@drawable/border_round_white_2dp"
                         android:padding="5dp"
-                        android:textColor="#000"
+                        android:textColor="@color/textBlack"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@id/labelsGuideline"
-                        app:layout_constraintTop_toBottomOf="@id/alternativeNamesLabel" />
+                        app:layout_constraintTop_toBottomOf="@id/departmentLabel" />
 
                     <TextView
-                        android:id="@+id/employeeBiography"
+                        android:id="@+id/employeeDescription"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20dp"
-                        android:background="@drawable/border_rounded_top_corners_34dp"
+                        android:background="@drawable/border_round_white_2dp"
                         android:padding="5dp"
-                        android:textColor="#000"
+                        android:textColor="@color/textBlack"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@id/labelsGuideline"
-                        app:layout_constraintTop_toBottomOf="@id/biographyLabel" />
+                        app:layout_constraintTop_toBottomOf="@id/descriptionLabel" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="20dp"
-                        app:layout_constraintTop_toBottomOf="@id/employeeBiography" />
+                        app:layout_constraintTop_toBottomOf="@id/employeeDescription" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.core.widget.NestedScrollView>
@@ -144,11 +146,11 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="15dp"
                 android:gravity="center"
-                android:shadowColor="#FFFFFF"
+                android:shadowColor="#000"
                 android:shadowDx="2"
                 android:shadowDy="2"
-                android:shadowRadius="2"
-                android:textColor="@color/yellow"
+                android:shadowRadius="1.5"
+                android:textColor="#FFF"
                 android:textSize="32sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -168,7 +170,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.1"
             android:padding="10dp"
-            android:src="@drawable/icon_arrow_left_blue"
-            android:background="@drawable/border_round_white" />
+            android:src="@drawable/icon_arrow_left_white"
+            android:background="@drawable/border_round_white_360dp" />
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

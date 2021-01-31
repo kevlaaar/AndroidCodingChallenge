@@ -5,37 +5,31 @@ package co.teltech.base.shared.kotlin
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.TransitionDrawable
 import android.view.View
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import android.widget.PopupWindow
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
 import co.teltech.base.BuildConfig.BASE_URL
 import co.teltech.base.R
 import co.teltech.base.shared.base.Resource
-import com.airbnb.lottie.model.content.GradientType
+import com.google.android.material.snackbar.Snackbar
 import okhttp3.Request
-import timber.log.Timber
 import java.io.IOException
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.roundToInt
 
 
 fun URL.toBitmap(): Bitmap? {
@@ -45,6 +39,12 @@ fun URL.toBitmap(): Bitmap? {
         null
     }
 }
+
+fun View.setBackgroundColorWithoutChangingShape(colorArg: String, alpha: Int){
+    val color = ColorUtils.setAlphaComponent(Color.parseColor(colorArg), alpha)
+    background.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+}
+
 
 fun View.setCircleGradientColor(startColor: String, endColor: String) {
     val gradientDrawable = GradientDrawable(

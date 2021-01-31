@@ -11,4 +11,7 @@
     <string name="reset">Reset</string>
     <string name="log_out">Log out</string>
     <string name="debug_menu">Debug menu</string>
+    <string name="settings">Settings</string>
+    <string name="night_mode_toggle">Toggle night mode:</string>
+    <string name="choose_language">Choose a language:</string>
 </resources>

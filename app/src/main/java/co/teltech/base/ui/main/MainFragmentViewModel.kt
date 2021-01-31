@@ -2,6 +2,7 @@ package co.teltech.base.ui.main
 
 import android.app.Application
 import android.graphics.Bitmap
+import android.os.Parcelable
 import androidx.lifecycle.*
 import co.teltech.base.data.repo.UserRepository
 import co.teltech.base.shared.kotlin.toBitmap
@@ -20,9 +21,12 @@ class MainFragmentViewModel(
     private val userRepo: UserRepository
 ) :
     AndroidViewModel(application) {
-
+    var employeeObject: Employee? = null
     var teamList = MutableLiveData<List<Team>>()
-
+    var listState: Parcelable? = null
+    var selectedEmployeeBackgroundColor: String? = null
+    var selectedEmployeeImageUrl: String? = null
+    var selectedEmployeeListPosition: Int? = null
     var colorHashMap: HashMap<String, String> = hashMapOf()
     private var colorList: ArrayList<String> = arrayListOf("#FF33B5E5", "#FFAA66CC", "#4CAF50",
             "#FFFFBB33", "#FFFF4444", "#7A1235", "#FF9933CC", "#01770D", "#FFFF8800",
@@ -32,7 +36,7 @@ class MainFragmentViewModel(
         val response = userRepo.getEmployeeData()
         if (response.isSuccessful) {
             val list = response.body()
-            var teamList: ArrayList<Team> = arrayListOf()
+            val teamList: ArrayList<Team> = arrayListOf()
             list?.let {
                 var count = 8
                 it.forEach { employee ->

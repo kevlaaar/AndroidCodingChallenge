@@ -14,15 +14,19 @@ data class Employee(
     var intro: String,
     var image: String,
     var description: String,
-    var imageBitmap: Bitmap?,
-    var altImageBitmap: Bitmap?,
+    @Transient var imageBitmap: Bitmap?,
+    @Transient var altImageBitmap: Bitmap?,
     var imageMain: String,
-    var backgroundColor: String
+    var backgroundColor: String,
+    var clickedOn: Boolean = false
 ) : Serializable {
     fun getImageUrl(): String{
         return "https://teltech.co/images/members/$image.jpg"
     }
     fun getImageMainUrl(): String{
         return "https://teltech.co/images/members/$image-main.jpg"
+    }
+    fun getDepartmentCapitalised(): String {
+        return department.capitalize()
     }
 }

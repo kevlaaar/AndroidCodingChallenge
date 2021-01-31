@@ -5,28 +5,27 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import co.teltech.base.R
+import co.teltech.base.shared.util.PreferenceCache
 import co.teltech.base.shared.util.SettingsManager
 import co.teltech.base.shared.util.SettingsManager.Companion.ENGLISH
+import co.teltech.base.shared.util.SettingsManager.Companion.MONTENEGRIN
 import kotlinx.android.synthetic.main.fragment_settings.*
 import org.koin.android.ext.android.inject
-import timber.log.Timber
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val settingsManager: SettingsManager by inject()
-    private var nightModeOn = false
-    private val englishOn = false
+    private val preferenceCache: PreferenceCache by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        main_toggle_language.setOnClickListener {
+        englishFlag.setOnClickListener {
             settingsManager.changeLanguage(requireActivity(), ENGLISH)
         }
-
-        main_toggle_mode.setOnClickListener {
-            Timber.e("NAJT MOD $nightModeOn")
-            nightModeOn = !nightModeOn
-            settingsManager.changeUiMode(requireActivity(), if(nightModeOn) Configuration.UI_MODE_NIGHT_YES else Configuration.UI_MODE_NIGHT_NO)
+        montenegroFlag.setOnClickListener {
+            settingsManager.changeLanguage(requireActivity(), MONTENEGRIN)
         }
+        sunIcon.setOnClickListener { settingsManager.changeUiMode(requireActivity(), Configuration.UI_MODE_NIGHT_NO) }
+        moonIcon.setOnClickListener { settingsManager.changeUiMode(requireActivity(), Configuration.UI_MODE_NIGHT_YES) }
     }
 }
