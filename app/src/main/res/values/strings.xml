@@ -14,4 +14,8 @@
     <string name="settings">Settings</string>
     <string name="night_mode_toggle">Toggle night mode:</string>
     <string name="choose_language">Choose a language:</string>
+    <string name="description">Description</string>
+    <string name="department">Department</string>
+    <string name="smooth">SMOOTH</string>
+    <string name="snapping">SNAPPING</string>
 </resources>

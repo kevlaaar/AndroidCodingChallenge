@@ -15,4 +15,8 @@
     <string name="choose_language">Izaberite jezik:</string>
     <string name="night_mode_toggle">Upalite noćni mod:</string>
     <string name="settings">Podešavanja</string>
+    <string name="description">Opis</string>
+    <string name="department">Odjeljenje</string>
+    <string name="smooth">GLATKO</string>
+    <string name="snapping">JEDAN PO JEDAN</string>
 </resources>

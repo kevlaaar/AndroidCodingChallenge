@@ -1,5 +1,6 @@
 package co.teltech.base.ui.main
 
+import android.content.res.Configuration
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,17 +11,17 @@ import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import co.teltech.base.R
 import co.teltech.base.databinding.FragmentMainBinding
 import co.teltech.base.shared.kotlin.changeBackgroundAnimated
+import co.teltech.base.shared.kotlin.setBackgroundColorWithoutChangingShape
 import co.teltech.base.shared.util.GlideDrawableCrossFade
 import co.teltech.base.ui.main.adapters.EmployeeAdapter
+import co.teltech.base.ui.main.adapters.GridEmployeeAdapter
 import co.teltech.base.ui.main.adapters.TeamsAdapter
 import co.teltech.base.vo.Employee
+import co.teltech.base.vo.GridEmployee
 import co.teltech.base.vo.Team
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -28,14 +29,22 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 
-class MainFragment : Fragment(), EmployeeAdapter.EmployeeOnClickListener {
+class MainFragment : Fragment(), EmployeeAdapter.EmployeeOnClickListener, GridEmployeeAdapter.GridEmployeeOnClickListener {
     private val viewModel: MainFragmentViewModel by viewModel()
     private lateinit var binding: FragmentMainBinding
     private var employeeList: List<Employee> = ArrayList()
+    private var teamList: List<Team> = ArrayList()
     private lateinit var employeeAdapter: EmployeeAdapter
+    private var gridEmployeeList: ArrayList<GridEmployee> = ArrayList()
+    private lateinit var gridEmployeeAdapter: GridEmployeeAdapter
     private lateinit var teamsAdapter: TeamsAdapter
+    private var screenOrientation = -1
     val snapHelper = PagerSnapHelper()
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -44,59 +53,60 @@ class MainFragment : Fragment(), EmployeeAdapter.EmployeeOnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.employeeRecycler.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        employeeAdapter = EmployeeAdapter(requireContext(), this)
+        screenOrientation = this.resources.configuration.orientation
+        if (screenOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+            gridEmployeeAdapter = GridEmployeeAdapter(requireContext(), this)
+            binding.employeeRecycler.adapter = gridEmployeeAdapter
+            val gridLayoutManager = GridLayoutManager(requireContext(), 3)
+            gridLayoutManager.spanSizeLookup = (object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    return if (gridEmployeeList[position].viewType == 3) gridLayoutManager.spanCount else 1
+                }
+            })
+            binding.employeeRecycler.layoutManager = gridLayoutManager
+            binding.employeeRecycler.clipChildren = false
+            GridLayoutManager(requireContext(), 3)
+        } else {
+            employeeAdapter = EmployeeAdapter(requireContext(), this)
+            binding.employeeRecycler.adapter = employeeAdapter
+            binding.employeeRecycler.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        }
         val itemAnimator: DefaultItemAnimator = object : DefaultItemAnimator() {
             override fun canReuseUpdatedViewHolder(viewHolder: RecyclerView.ViewHolder): Boolean {
                 return true
             }
         }
         binding.employeeRecycler.itemAnimator = itemAnimator
-        binding.employeeRecycler.adapter = employeeAdapter
         viewModel.teamList.observe(viewLifecycleOwner, {
             it?.let { refreshTeams(it) }
         })
         viewModel.employeeList.observe(viewLifecycleOwner, {
             it?.let {
                 employeeList = it
+                gridEmployeeList = viewModel.gridEmployeeList
                 refreshEmployees(it)
             }
         })
         addSnapperListener()
-        if(viewModel.listState != null) {
+        if (viewModel.listState != null) {
             binding.employeeRecycler.layoutManager?.onRestoreInstanceState(viewModel.listState)
-            Glide.with(requireContext())
-                .load(viewModel.selectedEmployeeImageUrl)
-                .circleCrop()
-                .transition(DrawableTransitionOptions.with(GlideDrawableCrossFade()))
-                .into(binding.mainImage)
-            binding.mainImage.changeBackgroundAnimated(
-                "#FFFFFF",
-                viewModel.selectedEmployeeBackgroundColor?: "#FFFFFF",
-                360f,
-                GradientDrawable.Orientation.LEFT_RIGHT,
-                GradientDrawable.LINEAR_GRADIENT
-            )
-            binding.backgroundCircleImage.changeBackgroundAnimated(
-                viewModel.selectedEmployeeBackgroundColor?: "#FFFFFF",
-                "#FFFFFF",
-                600f,
-                GradientDrawable.Orientation.LEFT_RIGHT,
-                GradientDrawable.RADIAL_GRADIENT
-            )
-        }
-        binding.settingsButton.setOnClickListener{
-            findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
-        }
 
-        viewModel.selectedEmployeeListPosition?.let {position ->
-            binding.mainImage.setOnClickListener { navigateToDetails(employeeList[position]) }
+            viewModel.selectedEmployeeObject?. let { employee ->
+                if(screenOrientation == Configuration.ORIENTATION_LANDSCAPE){
+                    loadEmployeeInLandscapeMode(employee)
+                } else {
+                    loadEmployeeInPortraitMode(employee)
+                }
+            }
+
+        }
+        binding.settingsButton.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
         }
     }
 
     private fun addSnapperListener() {
-        binding.toggleButtonLayout.setTransitionListener(object : MotionLayout.TransitionListener {
+        binding.toggleButtonLayout?.setTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {}
             override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {}
             override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
@@ -117,45 +127,84 @@ class MainFragment : Fragment(), EmployeeAdapter.EmployeeOnClickListener {
     }
 
     private fun refreshEmployees(employeeList: List<Employee>?) {
-        Timber.e("REFRESUJEM RECYCLER")
         employeeList?.let {
-            employeeAdapter.setData(it)
+            if(screenOrientation == Configuration.ORIENTATION_LANDSCAPE){
+                gridEmployeeAdapter.setData(gridEmployeeList)
+            } else {
+                employeeAdapter.setData(it)
+            }
         }
     }
 
     private fun refreshTeams(teamList: List<Team>) {
-        Timber.e("REFRESUJEM TEAMS")
         teamsAdapter = TeamsAdapter(requireContext(), teamList)
-        binding.teamInfoRecycler.adapter = teamsAdapter
+        binding.teamInfoRecycler?.adapter = teamsAdapter
     }
 
     override fun onEmployeeClick(position: Int) {
+        val employeeObject = employeeList[position]
+        loadEmployeeInPortraitMode(employeeObject)
+        viewModel.selectedEmployeeObject = employeeObject
+    }
+
+    override fun onGridEmployeeClick(position: Int) {
+        val employeeObject = gridEmployeeList[position].employeeObject as Employee
+        loadEmployeeInLandscapeMode(employeeObject)
+        viewModel.selectedEmployeeObject = employeeObject
+    }
+    private fun loadEmployeeInPortraitMode(employeeObject: Employee){
         Glide.with(requireContext())
-            .load(employeeList[position].getImageMainUrl())
+            .load(employeeObject.getImageMainUrl())
             .circleCrop()
             .transition(DrawableTransitionOptions.with(GlideDrawableCrossFade()))
             .into(binding.mainImage)
         binding.mainImage.changeBackgroundAnimated(
             "#FFFFFF",
-            employeeList[position].backgroundColor,
+            employeeObject.backgroundColor,
             360f,
             GradientDrawable.Orientation.LEFT_RIGHT,
             GradientDrawable.LINEAR_GRADIENT
         )
         binding.backgroundCircleImage.changeBackgroundAnimated(
-            employeeList[position].backgroundColor,
+            employeeObject.backgroundColor,
             "#FFFFFF",
             600f,
             GradientDrawable.Orientation.LEFT_RIGHT,
             GradientDrawable.RADIAL_GRADIENT
         )
-        viewModel.employeeObject = employeeList[position]
-        viewModel.selectedEmployeeImageUrl = employeeList[position].getImageMainUrl()
-        viewModel.selectedEmployeeListPosition = position
-        viewModel.selectedEmployeeBackgroundColor = employeeList[position].backgroundColor
-        binding.mainImage.setOnClickListener { navigateToDetails(employeeList[position]) }
+        binding.mainImage.setOnClickListener { navigateToDetails(employeeObject) }
     }
-
+    private fun loadEmployeeInLandscapeMode(employeeObject: Employee){
+        Glide.with(requireContext())
+            .load(employeeObject.getImageMainUrl())
+            .circleCrop()
+            .transition(DrawableTransitionOptions.with(GlideDrawableCrossFade()))
+            .into(binding.mainImage)
+        binding.mainImage.changeBackgroundAnimated(
+            "#FFFFFF",
+            employeeObject.backgroundColor,
+            360f,
+            GradientDrawable.Orientation.LEFT_RIGHT,
+            GradientDrawable.LINEAR_GRADIENT
+        )
+        binding.backgroundCircleImage.changeBackgroundAnimated(
+            employeeObject.backgroundColor,
+            "#FFFFFF",
+            600f,
+            GradientDrawable.Orientation.LEFT_RIGHT,
+            GradientDrawable.RADIAL_GRADIENT
+        )
+        binding.departmentLabel?.setBackgroundColorWithoutChangingShape(employeeObject.backgroundColor, 255)
+        binding.descriptionLabel?.setBackgroundColorWithoutChangingShape(employeeObject.backgroundColor, 255)
+        binding.employeeDescription?.text = employeeObject.getFullDescription()
+        binding.employeeDepartment?.text = employeeObject.getDepartmentCapitalised()
+        val employeeFullName = if(employeeObject.surname.isNotEmpty()) {
+            "${employeeObject.name} ${employeeObject.surname}"
+        } else {
+            employeeObject.name
+        }
+        binding.employeeName?.text = employeeFullName
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.listState = binding.employeeRecycler.layoutManager?.onSaveInstanceState()

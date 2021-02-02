@@ -10,8 +10,10 @@ import androidx.navigation.fragment.findNavController
 import co.teltech.base.R
 import co.teltech.base.databinding.FragmentDetailsBinding
 import co.teltech.base.shared.kotlin.setBackgroundColorWithoutChangingShape
+import co.teltech.base.shared.util.GlideDrawableCrossFade
 import co.teltech.base.vo.Employee
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 
 class DetailsFragment: Fragment() {
     private lateinit var binding: FragmentDetailsBinding
@@ -31,7 +33,7 @@ class DetailsFragment: Fragment() {
         binding.employeeTitleLayout.setBackgroundColorWithoutChangingShape(employeeObject.backgroundColor, 255)
         binding.departmentLabel.setBackgroundColorWithoutChangingShape(employeeObject.backgroundColor, 255)
         binding.descriptionLabel.setBackgroundColorWithoutChangingShape(employeeObject.backgroundColor, 255)
-        binding.employeeDescription.text = employeeObject.description
+        binding.employeeDescription.text = employeeObject.getFullDescription()
         binding.employeeDepartment.text = employeeObject.getDepartmentCapitalised()
         val employeeFullName = if(employeeObject.surname.isNotEmpty()) {
             "${employeeObject.name} ${employeeObject.surname}"
@@ -41,6 +43,7 @@ class DetailsFragment: Fragment() {
         binding.employeeName.text = employeeFullName
         Glide.with(requireContext())
             .load(employeeObject.getImageMainUrl())
+            .transition(DrawableTransitionOptions.with(GlideDrawableCrossFade()))
             .into(binding.employeeImageMotion)
         binding.backButtonImage.setOnClickListener { findNavController().popBackStack() }
         return binding.root

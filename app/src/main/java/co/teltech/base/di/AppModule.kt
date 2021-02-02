@@ -6,7 +6,7 @@ import co.teltech.base.data.remote.ApiService
 import co.teltech.base.data.remote.AuthorizationInterceptor
 import co.teltech.base.data.remote.RemoteDataSource
 import co.teltech.base.data.remote.TokenRefreshAuthenticator
-import co.teltech.base.data.repo.UserRepository
+import co.teltech.base.data.repo.EmployeeRepository
 import co.teltech.base.shared.util.PreferenceCache
 import co.teltech.base.shared.util.SettingsManager
 import co.teltech.base.ui.MainViewModel
@@ -58,7 +58,7 @@ val networkModule = module {
 
 val dataModule = module {
     single { RemoteDataSource(get()) }
-    single { UserRepository(get(), get<AuthorizationInterceptor>(), get()) }
+    single { EmployeeRepository(get(), get<AuthorizationInterceptor>(), get()) }
 }
 
 val viewModelModule = module {

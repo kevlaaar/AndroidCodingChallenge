@@ -1,0 +1,190 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="co.teltech.base.ui.main.MainFragmentViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/login_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="contentDescription">
+
+         <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/employeeRecyclerGuideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"/>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/detailsScrollViewGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.4"/>
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/detailsScrollView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="@id/detailsScrollViewGuideline"
+            app:layout_constraintEnd_toEndOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/mainImageStartGuideLine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.2"/>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/mainImageEndGuideLine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.8"/>
+
+                <ImageView
+                    android:id="@+id/backgroundCircleImage"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/backgroundWhite"
+                    android:padding="10dp"
+                    app:layout_constraintDimensionRatio="W,1:1"
+                    app:layout_constraintEnd_toEndOf="@id/mainImageEndGuideLine"
+                    app:layout_constraintStart_toStartOf="@id/mainImageStartGuideLine"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/mainImage"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:background="@drawable/border_round_gradient"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="@id/backgroundCircleImage"
+                    app:layout_constraintDimensionRatio="H,1:1"
+                    app:layout_constraintEnd_toEndOf="@id/backgroundCircleImage"
+                    app:layout_constraintStart_toStartOf="@id/backgroundCircleImage"
+                    app:layout_constraintTop_toTopOf="@id/backgroundCircleImage" />
+                <TextView
+                    android:id="@+id/employeeName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:gravity="center"
+                    android:layout_marginTop="30dp"
+                    android:textColor="@color/textBlack"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/mainImage"
+                    app:layout_constraintStart_toStartOf="@id/mainImage"
+                    app:layout_constraintTop_toBottomOf="@id/mainImage" />
+
+                <TextView
+                    android:id="@+id/departmentLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/department"
+                    android:background="@drawable/border_rounded_top_corners_10dp"
+                    android:gravity="end"
+                    android:paddingStart="18dp"
+                    android:paddingTop="3dp"
+                    android:paddingEnd="18dp"
+                    android:paddingBottom="3dp"
+                    android:shadowColor="#000"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="1.5"
+                    android:textColor="#FFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/mainImage"
+                    app:layout_constraintTop_toBottomOf="@id/employeeName" />
+
+                <TextView
+                    android:id="@+id/descriptionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/description"
+                    android:background="@drawable/border_rounded_top_corners_10dp"
+                    android:gravity="end"
+                    android:paddingStart="18dp"
+                    android:paddingTop="3dp"
+                    android:paddingEnd="18dp"
+                    android:paddingBottom="3dp"
+                    android:shadowColor="#000"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="1.5"
+                    android:textColor="#FFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/mainImage"
+                    app:layout_constraintTop_toBottomOf="@id/employeeDepartment" />
+
+                <TextView
+                    android:id="@+id/employeeDepartment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_round_white_2dp"
+                    android:padding="5dp"
+                    android:textColor="@color/textBlack"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="@+id/mainImage"
+                    app:layout_constraintStart_toStartOf="@id/mainImage"
+                    app:layout_constraintTop_toBottomOf="@id/departmentLabel" />
+
+                <TextView
+                    android:id="@+id/employeeDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_round_white_2dp"
+                    android:padding="5dp"
+                    android:textColor="@color/textBlack"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="50dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/mainImage"
+                    app:layout_constraintStart_toStartOf="@id/mainImage"
+                    app:layout_constraintTop_toBottomOf="@id/descriptionLabel" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/employeeRecycler"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/employeeRecyclerGuideLine"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/settingsButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:padding="10dp"
+            android:background="@drawable/border_round_circle_gradient"
+            android:src="@drawable/icon_settings_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

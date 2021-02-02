@@ -1,6 +1,6 @@
 package co.teltech.base.data.remote
 
-import co.teltech.base.data.repo.UserRepository
+import co.teltech.base.data.repo.EmployeeRepository
 import co.teltech.base.shared.kotlin.signWithToken
 import okhttp3.Authenticator
 import okhttp3.Request
@@ -9,7 +9,7 @@ import okhttp3.Route
 import timber.log.Timber
 
 class TokenRefreshAuthenticator : Authenticator {
-    var userRepository: UserRepository? = null
+    var employeeRepository: EmployeeRepository? = null
 
     private val Response.retryCount: Int
         get() {
@@ -28,7 +28,7 @@ class TokenRefreshAuthenticator : Authenticator {
     }
 
     private fun Response.createSignedRequest(): Request? = try {
-        val accessToken = userRepository?.refreshToken()
+        val accessToken = employeeRepository?.refreshToken()
         request.signWithToken(accessToken)
     } catch (error: Throwable) {
         Timber.e("Failed to resign request")

@@ -29,4 +29,7 @@ data class Employee(
     fun getDepartmentCapitalised(): String {
         return department.capitalize()
     }
+    fun getFullDescription(): String{
+        return "$intro $description"
+    }
 }

@@ -7,15 +7,14 @@ import co.teltech.base.data.remote.AccessTokenListener
 import co.teltech.base.data.remote.RemoteDataSource
 import co.teltech.base.data.remote.TokenRefreshAuthenticator
 import co.teltech.base.shared.base.Resource
-import co.teltech.base.vo.Employee
 
-class UserRepository(
+class EmployeeRepository(
     private val remoteDataSource: RemoteDataSource,
     private val accessTokenListener: AccessTokenListener,
     authenticator: TokenRefreshAuthenticator
 ) {
     init {
-        authenticator.userRepository = this
+        authenticator.employeeRepository = this
     }
 
     suspend fun getEmployeeData() = remoteDataSource.getEmployeeData()

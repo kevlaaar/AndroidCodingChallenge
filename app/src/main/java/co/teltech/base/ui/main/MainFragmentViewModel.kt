@@ -4,9 +4,10 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.os.Parcelable
 import androidx.lifecycle.*
-import co.teltech.base.data.repo.UserRepository
+import co.teltech.base.data.repo.EmployeeRepository
 import co.teltech.base.shared.kotlin.toBitmap
 import co.teltech.base.vo.Employee
+import co.teltech.base.vo.GridEmployee
 import co.teltech.base.vo.Team
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -18,22 +19,20 @@ import kotlin.collections.set
 
 class MainFragmentViewModel(
     application: Application,
-    private val userRepo: UserRepository
+    private val employeeRepo: EmployeeRepository
 ) :
     AndroidViewModel(application) {
-    var employeeObject: Employee? = null
+    var selectedEmployeeObject: Employee? = null
     var teamList = MutableLiveData<List<Team>>()
     var listState: Parcelable? = null
-    var selectedEmployeeBackgroundColor: String? = null
-    var selectedEmployeeImageUrl: String? = null
-    var selectedEmployeeListPosition: Int? = null
     var colorHashMap: HashMap<String, String> = hashMapOf()
+    var gridEmployeeList: ArrayList<GridEmployee> = arrayListOf()
     private var colorList: ArrayList<String> = arrayListOf("#FF33B5E5", "#FFAA66CC", "#4CAF50",
             "#FFFFBB33", "#FFFF4444", "#7A1235", "#FF9933CC", "#01770D", "#FFFF8800",
             "#FFCC0000", "#CDDC39", "#F44336", "#2C00CC")
     var usedColorList: ArrayList<String> = arrayListOf()
     var employeeList = liveData<List<Employee>?> {
-        val response = userRepo.getEmployeeData()
+        val response = employeeRepo.getEmployeeData()
         if (response.isSuccessful) {
             val list = response.body()
             val teamList: ArrayList<Team> = arrayListOf()
@@ -46,9 +45,10 @@ class MainFragmentViewModel(
                     employee.altImageBitmap = bitmaps[1]!!
                     colorHashMap[employee.department]?.let { colorInt ->
                         employee.backgroundColor = colorInt
-                        Timber.e("VEC IMA ${employee.department} i dajem boju $colorInt")
+                        gridEmployeeList.add(GridEmployee(4, employee, null))
                     } ?: run {
-                        Timber.e("NIJE BILO ${employee.department}")
+                       gridEmployeeList.add(GridEmployee(3, null, employee.department))
+                        gridEmployeeList.add(GridEmployee(4, employee, null))
                         val randomColor = getRandomColorString()
                         colorHashMap[employee.department] = randomColor
                         teamList.add(Team(randomColor, employee.department))
