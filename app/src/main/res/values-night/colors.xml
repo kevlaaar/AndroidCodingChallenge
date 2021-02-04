@@ -7,4 +7,5 @@
     <color name="textBlack">#FFFFFF</color>
     <color name="backgroundWhite">#121212</color>
     <color name="backgroundGrayWhenDarkMode">#50403A3A</color>
+    <item name="popupBackground" type="color">#121212</item>
 </resources>

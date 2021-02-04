@@ -22,21 +22,7 @@
     <item name="yellow" type="color">#CDDC39</item>
     <item name="pink" type="color">#F44336</item>
     <item name="darkBlue" type="color">#2C00CC</item>
+    <item name="popupBackground" type="color">#DDE1B8</item>
 
-    <integer-array name="androidColors">
-        <item>@color/blue</item>
-        <item>@color/purple</item>
-        <item>@color/green</item>
-        <item>@color/orange</item>
-        <item>@color/red</item>
-        <item>@color/brown</item>
-        <item>@color/darkPurple</item>
-        <item>@color/darkGreen</item>
-        <item>@color/darkOrange</item>
-        <item>@color/darkRed</item>
-        <item>@color/yellow</item>
-        <item>@color/pink</item>
-        <item>@color/darkBlue</item>
-    </integer-array>
 
 </resources>

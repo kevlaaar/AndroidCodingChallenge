@@ -1,6 +1,7 @@
 package co.teltech.base.ui.main.adapters
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import co.teltech.base.R
 import co.teltech.base.shared.kotlin.setCircleGradientColor
+import co.teltech.base.shared.kotlin.toBitmap
 import co.teltech.base.vo.Employee
 import com.bumptech.glide.Glide
-import timber.log.Timber
+import com.bumptech.glide.request.target.BitmapImageViewTarget
+import kotlinx.coroutines.*
+import java.net.URL
 
 
 class EmployeeAdapter(
@@ -25,7 +29,7 @@ class EmployeeAdapter(
         }
 
         override fun areContentsTheSame(oldItem: Employee, newItem: Employee): Boolean {
-            newItem.imageBitmap?.let{
+            newItem.imageBitmap?.let {
                 return false
             } ?: run {
                 return true
@@ -49,6 +53,7 @@ class EmployeeAdapter(
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
+
     override fun getItemId(position: Int): Long {
         return differ.currentList[position].id.toLong()
     }
@@ -61,13 +66,30 @@ class EmployeeAdapter(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
         private val employeeImage: ImageView = itemView.findViewById(R.id.employeeImage)
-        private var colorHashMap: HashMap<String, String> = hashMapOf()
         fun bindEmployee(employee: Employee) {
-            Timber.e("BINDING ${employee.imageBitmap}")
-            Glide.with(context)
-                .load(employee.imageBitmap)
-                .circleCrop()
-                .into(employeeImage)
+            if (employee.imageBitmap == null) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val bitmaps = getImagesBitmapsFromUrl(employee.getImageUrl())
+                    employee.imageBitmap = bitmaps[0]
+                    withContext(Dispatchers.Main) {
+                        Glide.with(context)
+                            .asBitmap()
+                            .circleCrop()
+                            .load(employee.imageBitmap)
+                            .into(BitmapImageViewTarget(employeeImage))
+                        employee.imageBitmap?.let{
+                            employeeOnClickListener.updateEmployeeBitmap(adapterPosition, it)
+                        }
+                        notifyItemChanged(adapterPosition)
+                    }
+                }
+            } else {
+                Glide.with(context)
+                    .load(employee.imageBitmap)
+                    .circleCrop()
+                    .into(employeeImage)
+            }
+            itemView.requestLayout()
             employee.backgroundColor?.let {
                 employeeImage.setCircleGradientColor(
                     "#FFFFFF",
@@ -78,10 +100,29 @@ class EmployeeAdapter(
                 }
 
             }
-        }
+    }
+
+        private suspend fun getImagesBitmapsFromUrl(imageUrl: String): Array<Bitmap?> =
+            withContext(Dispatchers.IO) {
+                val url = URL(imageUrl)
+                val bitmaps = arrayOfNulls<Bitmap>(2)
+                val fullBitmap = url.toBitmap()
+                fullBitmap?.let {
+                    bitmaps[0] =
+                        Bitmap.createBitmap(
+                            fullBitmap,
+                            0,
+                            0,
+                            fullBitmap.width / 2,
+                            fullBitmap.height
+                        )
+                }
+                bitmaps
+            }
     }
 
     interface EmployeeOnClickListener {
         fun onEmployeeClick(position: Int)
+        fun updateEmployeeBitmap(position: Int, imageBitmap: Bitmap)
     }
 }
